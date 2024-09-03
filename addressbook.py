@@ -218,6 +218,26 @@ class AddressBook:
                     self.add_contact(contact)
         print(f"Address book loaded from {filename}.")
 
+    def write_to_csv_file(self, filename):
+        with open(filename, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['First Name', 'Last Name', 'Address', 'City', 'State', 'Zip Code', 'Phone Number', 'Email'])
+            for contacts in self.contacts.values():
+                for contact in contacts.values():
+                    writer.writerow([contact.firstname, contact.lastname, contact.address, contact.city, contact.state, contact.zip_code, contact.mobile, contact.email])
+        print(f"Address book saved to {filename}.")
+
+    def read_from_csv_file(self, filename):
+        self.contacts.clear()  # Clear existing contacts
+        with open(filename, 'r') as file:
+            reader = csv.reader(file)
+            next(reader)  # Skip the header row
+            for row in reader:
+                first_name, last_name, address, city, state, zip_code, phone_number, email = row
+                contact = Contact(first_name, last_name, address, city, state, int(zip_code), phone_number, email)
+                self.add_contact(contact)
+        print(f"Address book loaded from {filename}.")
+
     def display_menu(self):
         print("\nAddress Book Menu:")
         print("1. Add a contact")
@@ -230,7 +250,9 @@ class AddressBook:
         print("8. Display sorted contacts by zip code")
         print("9. Save address book to file")
         print("10. Load address book from file")
-        print("11. Exit")
+        print("11. Save address book to csv file")
+        print("12. Load address book from csv file")
+        print("13. Exit")
 
     def run(self):
         while True:
@@ -297,8 +319,16 @@ class AddressBook:
             elif choice == '10':
                 filename = self.get_input("Enter filename to load the address book: ")
                 self.read_from_file(filename)
-                
+
             elif choice == '11':
+                filename = self.get_input("Enter filename to save the address book: ")
+                self.write_to_csv_file(filename)
+                
+            elif choice == '12':
+                filename = self.get_input("Enter filename to load the address book: ")
+                self.read_from_csv_file(filename)
+
+            elif choice == '13':
                 print("Exiting the Address Book.")
                 break
                 
