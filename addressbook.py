@@ -9,6 +9,7 @@
 """
 
 import csv
+import json
 
 class Contact:
     def __init__(self, first_name, last_name, address, city, state, zip_code, ph_no, email):
@@ -238,6 +239,42 @@ class AddressBook:
                 self.add_contact(contact)
         print(f"Address book loaded from {filename}.")
 
+    def write_to_json(self, filename):
+        data = {}
+        for contacts in self.contacts.values():
+            for contact in contacts.values():
+                data[contact.email] = {
+                    'first_name': contact.firstname,
+                    'last_name': contact.lastname,
+                    'address': contact.address,
+                    'city': contact.city,
+                    'state': contact.state,
+                    'zip_code': contact.zip_code,
+                    'phone_number': contact.mobile,
+                    'email': contact.email
+                }
+        with open(filename, 'w') as file:
+            json.dump(data, file, indent=4)
+        print(f"Address book saved to {filename}.")
+
+    def read_from_json(self, filename):
+        self.contacts.clear()  # Clear existing contacts
+        with open(filename, 'r') as file:
+            data = json.load(file)
+            for email, contact_info in data.items():
+                contact = Contact(
+                    contact_info['first_name'],
+                    contact_info['last_name'],
+                    contact_info['address'],
+                    contact_info['city'],
+                    contact_info['state'],
+                    contact_info['zip_code'],
+                    contact_info['phone_number'],
+                    email
+                )
+                self.add_contact(contact)
+        print(f"Address book loaded from {filename}.")
+
     def display_menu(self):
         print("\nAddress Book Menu:")
         print("1. Add a contact")
@@ -252,7 +289,9 @@ class AddressBook:
         print("10. Load address book from file")
         print("11. Save address book to csv file")
         print("12. Load address book from csv file")
-        print("13. Exit")
+        print("13. Save address book to JSON file")
+        print("14. Load address book from JSON file")
+        print("15. Exit")
 
     def run(self):
         while True:
@@ -329,9 +368,17 @@ class AddressBook:
                 self.read_from_csv_file(filename)
 
             elif choice == '13':
+                filename = self.get_input("Enter the filename to save the address book as JSON: ")
+                self.write_to_json(filename)
+                
+            elif choice == '14':
+                filename = self.get_input("Enter the filename to load the address book from JSON: ")
+                self.read_from_json(filename)
+
+            elif choice == '15':
                 print("Exiting the Address Book.")
                 break
-                
+
             else:
                 print("Invalid choice. Please select a valid option.")
 
