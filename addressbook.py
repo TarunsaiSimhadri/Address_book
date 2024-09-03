@@ -130,6 +130,7 @@ class AddressBook:
             another = self.get_input("Do you want to add another contact? (yes/no): ").strip().lower()
             if another != 'yes':
                 break
+            
     def display_menu(self):
         print("\nAddress Book Menu:")
         print("1. Add a contact")
