@@ -155,6 +155,42 @@ class AddressBook:
         for contact in sorted_contacts:
             print(contact)
 
+    def display_contacts_sorted_by_city(self):
+        all_contacts = []
+        for contacts in self.contacts.values():
+            for contact in contacts.values():
+                all_contacts.append(contact)
+        
+        sorted_contacts = sorted(all_contacts, key=lambda x: x.city.lower())
+        
+        print("\nSorted Contacts by City:")
+        for contact in sorted_contacts:
+            print(contact)
+
+    def display_contacts_sorted_by_state(self):
+        all_contacts = []
+        for contacts in self.contacts.values():
+            for contact in contacts.values():
+                all_contacts.append(contact)
+        
+        sorted_contacts = sorted(all_contacts, key=lambda x: x.state.lower())
+        
+        print("\nSorted Contacts by State:")
+        for contact in sorted_contacts:
+            print(contact)
+
+    def display_contacts_sorted_by_zip(self):
+        all_contacts = []
+        for contacts in self.contacts.values():
+            for contact in contacts.values():
+                all_contacts.append(contact)
+        
+        sorted_contacts = sorted(all_contacts, key=lambda x: x.zip_code)
+        
+        print("\nSorted Contacts by Zip Code:")
+        for contact in sorted_contacts:
+            print(contact)
+
     def display_menu(self):
         print("\nAddress Book Menu:")
         print("1. Add a contact")
@@ -162,7 +198,10 @@ class AddressBook:
         print("3. Delete a contact")
         print("4. Add multiple contacts")
         print("5. Display sorted contacts")
-        print("6. Exit")
+        print("6. Display sorted contacts by city")
+        print("7. Display sorted contacts by state")
+        print("8. Display sorted contacts by zip code")
+        print("9. Exit")
 
     def run(self):
         while True:
@@ -211,6 +250,18 @@ class AddressBook:
                 self.display_contacts_sorted()
                 
             elif choice == '6':
+                print("\nDisplay sorted contacts by city")
+                self.display_contacts_sorted_by_city()
+                
+            elif choice == '7':
+                print("\nDisplay sorted contacts by state")
+                self.display_contacts_sorted_by_state()
+                
+            elif choice == '8':
+                print("\nDisplay sorted contacts by zip code")
+                self.display_contacts_sorted_by_zip()
+                
+            elif choice == '9':
                 print("Exiting the Address Book.")
                 break
                 
