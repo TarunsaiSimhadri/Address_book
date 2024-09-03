@@ -8,6 +8,8 @@
 
 """
 
+import csv
+
 class Contact:
     def __init__(self, first_name, last_name, address, city, state, zip_code, ph_no, email):
         self.firstname = first_name
@@ -191,6 +193,31 @@ class AddressBook:
         for contact in sorted_contacts:
             print(contact)
 
+    def write_to_file(self, filename):
+        with open(filename, 'w') as file:
+            for contacts in self.contacts.values():
+                for contact in contacts.values():
+                    file.write(f"{contact.firstname},{contact.lastname},{contact.address},{contact.city},{contact.state},{contact.zip_code},{contact.mobile},{contact.email}\n")
+        print(f"Address book saved to {filename}.")
+
+    def read_from_file(self, filename):
+        self.contacts.clear()  # Clear existing contacts
+        with open(filename, 'r') as file:
+            for line in file:
+                parts = line.strip().split(',')
+                if len(parts) == 8:
+                    first_name, last_name, address, city, state, zip_code, phone_number, email = parts
+                    try:
+                        zip_code = int(zip_code)
+                        phone_number = int(phone_number)
+                    except ValueError:
+                        print(f"Invalid zip code or phone number in file for email {email}. Skipping this line.")
+                        continue
+                    
+                    contact = Contact(first_name, last_name, address, city, state, zip_code, phone_number, email)
+                    self.add_contact(contact)
+        print(f"Address book loaded from {filename}.")
+
     def display_menu(self):
         print("\nAddress Book Menu:")
         print("1. Add a contact")
@@ -201,7 +228,9 @@ class AddressBook:
         print("6. Display sorted contacts by city")
         print("7. Display sorted contacts by state")
         print("8. Display sorted contacts by zip code")
-        print("9. Exit")
+        print("9. Save address book to file")
+        print("10. Load address book from file")
+        print("11. Exit")
 
     def run(self):
         while True:
@@ -260,8 +289,16 @@ class AddressBook:
             elif choice == '8':
                 print("\nDisplay sorted contacts by zip code")
                 self.display_contacts_sorted_by_zip()
-                
+
             elif choice == '9':
+                filename = self.get_input("Enter filename to save the address book: ")
+                self.write_to_file(filename)
+
+            elif choice == '10':
+                filename = self.get_input("Enter filename to load the address book: ")
+                self.read_from_file(filename)
+                
+            elif choice == '11':
                 print("Exiting the Address Book.")
                 break
                 
