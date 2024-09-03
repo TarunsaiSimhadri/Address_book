@@ -130,7 +130,63 @@ class AddressBook:
             another = self.get_input("Do you want to add another contact? (yes/no): ").strip().lower()
             if another != 'yes':
                 break
-        
+    def display_menu(self):
+        print("\nAddress Book Menu:")
+        print("1. Add a contact")
+        print("2. Update a contact")
+        print("3. Delete a contact")
+        print("4. Add multiple contacts")
+        print("5. Exit")
+
+    def run(self):
+        while True:
+            self.display_menu()
+            choice = self.get_input("Enter your choice: ").strip()
+
+            if choice == '1':
+                print("\nAdd a contact")
+                first_name = self.get_input("First name: ")
+                last_name = self.get_input("Last name: ")
+                address = self.get_input("Address: ")
+                city = self.get_input("City: ")
+                state = self.get_input("State: ")
+                zip_code = self.get_input("Zip code: ")
+                phone_number = self.get_input("Phone number: ")
+                email = self.get_input("Email: ")
+                
+                if not first_name or not last_name or not email:
+                    print("First name, last name, and email are required.")
+                    continue
+
+                try:
+                    zip_code = int(zip_code)
+                    phone_number = int(phone_number)
+                except ValueError:
+                    print("Invalid zip code or phone number. They must be integers.")
+                    continue
+                
+                contact = Contact(first_name, last_name, address, city, state, zip_code, phone_number, email)
+                self.add_contact(contact)
+                
+            elif choice == '2':
+                print("\nUpdate a contact")
+                self.update_person()
+                
+            elif choice == '3':
+                print("\nDelete a contact")
+                self.delete_contact()
+                
+            elif choice == '4':
+                print("\nAdd multiple contacts")
+                self.add_multiple_contacts()
+                
+            elif choice == '5':
+                print("Exiting the Address Book.")
+                break
+                
+            else:
+                print("Invalid choice. Please select a valid option.")
+
+
 address_book = AddressBook()
-contact1 = Contact("tarun", "sai", "maratahalli", "bangalore", "karnataka", "560037", "8659658652", "tarun.sai@example.com")
-address_book.add_contact(contact1)
+address_book.run()
