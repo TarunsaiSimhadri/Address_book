@@ -12,7 +12,7 @@ class Contact:
     def __init__(self, first_name, last_name, address, city, state, zip, ph_no, email):
         self.firstname = first_name
         self.lastname = last_name
-        self.address = addresscd 
+        self.address = address
         self.city = city
         self.state = state
         self.zip = zip
