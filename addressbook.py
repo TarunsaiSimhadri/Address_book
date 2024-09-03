@@ -142,14 +142,27 @@ class AddressBook:
             another = self.get_input("Do you want to add another contact? (yes/no): ").strip().lower()
             if another != 'yes':
                 break
-    
+
+    def display_contacts_sorted(self):
+        all_contacts = []
+        for contacts in self.contacts.values():
+            for contact in contacts.values():
+                all_contacts.append(contact)
+        
+        sorted_contacts = sorted(all_contacts, key=lambda x: (x.firstname.lower(), x.lastname.lower()))
+        
+        print("\nSorted Contacts:")
+        for contact in sorted_contacts:
+            print(contact)
+
     def display_menu(self):
         print("\nAddress Book Menu:")
         print("1. Add a contact")
         print("2. Update a contact")
         print("3. Delete a contact")
         print("4. Add multiple contacts")
-        print("5. Exit")
+        print("5. Display sorted contacts")
+        print("6. Exit")
 
     def run(self):
         while True:
@@ -194,6 +207,10 @@ class AddressBook:
                 self.add_multiple_contacts()
                 
             elif choice == '5':
+                print("\nDisplay sorted contacts")
+                self.display_contacts_sorted()
+                
+            elif choice == '6':
                 print("Exiting the Address Book.")
                 break
                 
