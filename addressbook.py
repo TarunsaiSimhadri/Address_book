@@ -240,6 +240,26 @@ class AddressBookManager:
                         results.append(person)
         return results
     
+    def search_by_city(self, city):
+        count = 0 
+        results = []
+        for address_book in self.address_books.values():
+            for contact in address_book.contacts.values():
+                for person in contact.values():
+                    if person.city.lower() == city.lower():
+                        count+=1
+        return count
+
+    def search_by_state(self, state):
+        count  = 0
+        results = []
+        for address_book in self.address_books.values():
+            for contact in address_book.contacts.values():
+                for person in contact.values():
+                    if person.state.lower() == state.lower():
+                        count+=1
+        return count
+    
 def main():
     manager = AddressBookManager()
     
@@ -249,7 +269,9 @@ def main():
         print("2. Select an Address Book")
         print("3. Search Contacts by City")
         print("4. Search Contacts by State")
-        print("5. Exit")
+        print("5. Count Contacts by City")
+        print("6. Count Contacts by State")
+        print("7. Exit")
 
         choice = AddressBook.get_input("Enter your choice: ").strip()
 
@@ -283,6 +305,16 @@ def main():
                 print(f"No contacts found in state '{state}'.")
 
         elif choice == '5':
+            city = AddressBook.get_input("Enter city to count contacts for: ")
+            count = manager.search_by_city(city)
+            print(f"Number of contacts in city '{city}': {count}")
+
+        elif choice == '6':
+            state = AddressBook.get_input("Enter state to count contacts for: ")
+            count = manager.search_by_state(state)
+            print(f"Number of contacts in state '{state}': {count}")
+
+        elif choice == '7':
             print("Exiting the Address Book Manager.")
             break
 
