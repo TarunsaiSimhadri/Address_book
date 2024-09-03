@@ -86,7 +86,21 @@ class AddressBook:
         else:
             print(f"No person found with the name {name}.")
 
+    def delete_contact(self):
+        name = self.get_input("Enter person name to update (format: first_name last_name): ")
+        name_parts = name.split()
+        if len(name_parts) != 2:
+            print("Invalid format. Please enter in 'first_name last_name' format.")
+            return
 
+        first_name, last_name = name_parts
+        key = (first_name.lower(), last_name.lower())
+
+        if key in self.contacts:
+            del self.contacts[key]
+        else:
+            print(f"No person found with the name {name}.")
+        
 address_book = AddressBook()
 contact1 = Contact("tarun", "sai", "maratahalli", "bangalore", "karnataka", "560037", "8659658652", "tarun.sai@example.com")
 address_book.add_contact(contact1)
