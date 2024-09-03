@@ -100,6 +100,36 @@ class AddressBook:
             del self.contacts[key]
         else:
             print(f"No person found with the name {name}.")
+
+    def add_multiple_contacts(self):
+        while True:
+            print("\nEnter details for a new contact:")
+            first_name = self.get_input("First name: ")
+            last_name = self.get_input("Last name: ")
+            address = self.get_input("Address: ")
+            city = self.get_input("City: ")
+            state = self.get_input("State: ")
+            zip_code = self.get_input("Zip code: ")
+            phone_number = self.get_input("Phone number: ")
+            email = self.get_input("Email: ")
+            
+            if not first_name or not last_name or not email:
+                print("First name, last name, and email are required.")
+                continue
+
+            try:
+                zip_code = int(zip_code)
+                phone_number = int(phone_number)
+            except ValueError:
+                print("Invalid zip code or phone number. They must be integers.")
+                continue
+            
+            contact = Contact(first_name, last_name, address, city, state, zip_code, phone_number, email)
+            self.add_contact(contact)
+            
+            another = self.get_input("Do you want to add another contact? (yes/no): ").strip().lower()
+            if another != 'yes':
+                break
         
 address_book = AddressBook()
 contact1 = Contact("tarun", "sai", "maratahalli", "bangalore", "karnataka", "560037", "8659658652", "tarun.sai@example.com")
