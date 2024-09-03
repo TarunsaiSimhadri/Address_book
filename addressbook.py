@@ -1,38 +1,33 @@
-"""
-
-@Author: TarunSai
-@Date: 2024-09-03
-@Last Modified by: Tarunsai
-@Last Modified time: 
-@Title : Addressbook.
-
-"""
-
 class Contact:
-    def __init__(self, first_name, last_name, address, city, state, zip, ph_no, email):
+    def __init__(self, first_name, last_name, address, city, state, zip_code, ph_no, email):
         self.firstname = first_name
         self.lastname = last_name
         self.address = address
         self.city = city
         self.state = state
-        self.zip = zip
+        self.zip_code = zip_code
         self.mobile = ph_no
         self.email = email
     
+    def __str__(self):
+        return (f"Name: {self.firstname} {self.lastname}, Address: {self.address}, City: {self.city}, "
+                f"State: {self.state}, Zip: {self.zip_code}, Phone: {self.mobile}, Email: {self.email}")
+
 class AddressBook:
-    def __init__(self):
+    def __init__(self, name):
+        self.name = name
         self.contacts = {}
     
-    def add_contact(self, contacts):
-        key = (contacts.firstname.lower(), contacts.lastname.lower())
+    def add_contact(self, contact):
+        key = (contact.firstname.lower(), contact.lastname.lower())
         
         if key not in self.contacts:
             self.contacts[key] = {}
         
-        if contacts.email in self.contacts[key]:
+        if contact.email in self.contacts[key]:
             print("Contact already exists.")
         else:
-            self.contacts[key][contacts.email] = contacts
+            self.contacts[key][contact.email] = contact
             print("Contact added successfully.")
         
     @staticmethod
@@ -52,7 +47,7 @@ class AddressBook:
         if key in self.contacts:
             print("Current details:")
             for contact in self.contacts[key].values():
-                print(vars(contact))
+                print(contact)
             
             email = self.get_input("Enter email of the person to update: ")
             if email in self.contacts[key]:
@@ -75,7 +70,7 @@ class AddressBook:
                         print("Invalid zip code. Keeping the current value.")
                 if new_mobile:
                     try:
-                        person.ph_no = new_mobile
+                        person.mobile = new_mobile
                     except ValueError:
                         print("Invalid phone number. Keeping the current value.")
                 
@@ -87,7 +82,7 @@ class AddressBook:
             print(f"No person found with the name {name}.")
 
     def delete_contact(self):
-        name = self.get_input("Enter person name to update (format: first_name last_name): ")
+        name = self.get_input("Enter person name to delete (format: first_name last_name): ")
         name_parts = name.split()
         if len(name_parts) != 2:
             print("Invalid format. Please enter in 'first_name last_name' format.")
@@ -97,7 +92,14 @@ class AddressBook:
         key = (first_name.lower(), last_name.lower())
 
         if key in self.contacts:
-            del self.contacts[key]
+            email = self.get_input("Enter email of the person to delete: ")
+            if email in self.contacts[key]:
+                del self.contacts[key][email]
+                if not self.contacts[key]:  # Remove the key if no contacts are left
+                    del self.contacts[key]
+                print(f"Contact with email {email} deleted.")
+            else:
+                print(f"No contact found with the email {email}.")
         else:
             print(f"No person found with the name {name}.")
 
@@ -130,7 +132,7 @@ class AddressBook:
             another = self.get_input("Do you want to add another contact? (yes/no): ").strip().lower()
             if another != 'yes':
                 break
-            
+    
     def display_menu(self):
         print("\nAddress Book Menu:")
         print("1. Add a contact")
@@ -188,6 +190,54 @@ class AddressBook:
             else:
                 print("Invalid choice. Please select a valid option.")
 
+class AddressBookManager:
+    def __init__(self):
+        self.address_books = {}
+    
+    def add_address_book(self, name):
+        if name in self.address_books:
+            print(f"Address book '{name}' already exists.")
+        else:
+            self.address_books[name] = AddressBook(name)
+            print(f"Address book '{name}' added successfully.")
+    
+    def select_address_book(self):
+        print("\nAvailable Address Books:")
+        for name in self.address_books.keys():
+            print(name)
+        name = AddressBook.get_input("Enter the name of the address book you want to use: ")
+        if name in self.address_books:
+            return self.address_books[name]
+        else:
+            print(f"No address book found with the name '{name}'.")
+            return None
 
-address_book = AddressBook()
-address_book.run()
+def main():
+    manager = AddressBookManager()
+    
+    while True:
+        print("\nMain Menu:")
+        print("1. Add an Address Book")
+        print("2. Select an Address Book")
+        print("3. Exit")
+
+        choice = AddressBook.get_input("Enter your choice: ").strip()
+
+        if choice == '1':
+            name = AddressBook.get_input("Enter the name for the new address book: ")
+            manager.add_address_book(name)
+
+        elif choice == '2':
+            address_book = manager.select_address_book()
+            if address_book:
+                address_book.run()
+
+        elif choice == '3':
+            print("Exiting the Address Book Manager.")
+            break
+
+        else:
+            print("Invalid choice. Please select a valid option.")
+
+if __name__ == "__main__":
+    main()
