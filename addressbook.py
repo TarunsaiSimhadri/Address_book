@@ -1,3 +1,13 @@
+"""
+
+@Author: TarunSai
+@Date: 2024-09-03
+@Last Modified by: Tarunsai
+@Last Modified time: 
+@Title : Addressbook.
+
+"""
+
 class Contact:
     def __init__(self, first_name, last_name, address, city, state, zip_code, ph_no, email):
         self.firstname = first_name
@@ -212,6 +222,24 @@ class AddressBookManager:
             print(f"No address book found with the name '{name}'.")
             return None
 
+    def search_by_city(self, city):
+        results = []
+        for address_book in self.address_books.values():
+            for contact in address_book.contacts.values():
+                for person in contact.values():
+                    if person.city.lower() == city.lower():
+                        results.append(person)
+        return results
+
+    def search_by_state(self, state):
+        results = []
+        for address_book in self.address_books.values():
+            for contact in address_book.contacts.values():
+                for person in contact.values():
+                    if person.state.lower() == state.lower():
+                        results.append(person)
+        return results
+    
 def main():
     manager = AddressBookManager()
     
@@ -219,7 +247,9 @@ def main():
         print("\nMain Menu:")
         print("1. Add an Address Book")
         print("2. Select an Address Book")
-        print("3. Exit")
+        print("3. Search Contacts by City")
+        print("4. Search Contacts by State")
+        print("5. Exit")
 
         choice = AddressBook.get_input("Enter your choice: ").strip()
 
@@ -233,6 +263,26 @@ def main():
                 address_book.run()
 
         elif choice == '3':
+            city = AddressBook.get_input("Enter city to search for: ")
+            results = manager.search_by_city(city)
+            if results:
+                print(f"\nContacts in city '{city}':")
+                for contact in results:
+                    print(contact)
+            else:
+                print(f"No contacts found in city '{city}'.")
+
+        elif choice == '4':
+            state = AddressBook.get_input("Enter state to search for: ")
+            results = manager.search_by_state(state)
+            if results:
+                print(f"\nContacts in state '{state}':")
+                for contact in results:
+                    print(contact)
+            else:
+                print(f"No contacts found in state '{state}'.")
+
+        elif choice == '5':
             print("Exiting the Address Book Manager.")
             break
 
